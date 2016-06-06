@@ -1,12 +1,16 @@
 package com.example.suhail.onmyway;
 
 import android.app.Dialog;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,6 +20,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.List;
 
 public class activity_map extends AppCompatActivity {
 
@@ -85,4 +92,37 @@ public class activity_map extends AppCompatActivity {
         mMap.animateCamera(update);
     }
 
+    public void hideSoftKeyboard(View v) {
+        InputMethodManager imm =(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+
+    public void geoLocate(String searchString) throws IOException {
+
+
+        Geocoder gc = new Geocoder(this);
+        List<Address> list = gc.getFromLocationName(searchString, 3);
+
+        if(list.size() > 0) {
+            android.location.Address add = list.get(0);
+            String locality = add.getLocality();
+            Toast.makeText(this, "Found: "+ locality, Toast.LENGTH_SHORT).show();
+
+            double lat = add.getLatitude();
+            double lng = add.getLongitude();
+            gotoLocation(lat, lng, 17);
+        } else {
+            Toast.makeText(this, "No results found for: "+ searchString, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void searchBtnMap(View view) throws IOException {
+        hideSoftKeyboard(view);
+
+        TextView tv = (TextView) findViewById(R.id.editTextSearch);
+        String searchString = tv.getText().toString();
+
+        geoLocate(searchString);
+    }
 }

@@ -24,27 +24,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-//        if (servicesOK()) {
-//            setContentView(R.layout.activity_main);
-//
-//            if(initMap()) {
-//                Toast.makeText(this, "Ready to map!", Toast.LENGTH_SHORT).show();
-//                gotoLocation(AJAX_LAT, AJAX_LNG, 13);
-//
-//                //as of now user must grand permissions to app from phone settings
-//                try {
-//                    mMap.setMyLocationEnabled(true);
-//                } catch (SecurityException e) {
-//                    Toast.makeText(this, "My Location not enabled!", Toast.LENGTH_SHORT).show();
-//                }
-//            } else {
-//                Toast.makeText(this, "Map not connected!", Toast.LENGTH_SHORT).show();
-//            }
-//        } else {
-//            Toast.makeText(this, "Services not OK!", Toast.LENGTH_SHORT).show();
-//        }
     }
 
 
