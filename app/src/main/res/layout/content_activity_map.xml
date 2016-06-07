@@ -18,25 +18,40 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchButton" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SEARCH"
-        android:id="@+id/searchButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/map"
-        android:layout_alignEnd="@+id/map"
-        android:onClick="searchBtnMap" />
+        android:layout_below="@+id/editTextSearch" />
 
     <EditText
-        android:layout_width="230dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:id="@+id/editTextSearch"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart="false"
         android:inputType="textCapWords"
         android:hint="Try Wall Mart, Staples"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/myLocationImgBtn"
+        android:src="@drawable/ic_my_location"
+        android:background="?android:selectableItemBackground"
+        android:layout_marginRight="21dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginTop="19dp"
+        android:onClick="showCurrentLocation"
+        android:layout_alignTop="@+id/map"
+        android:layout_alignRight="@+id/map"
+        android:layout_alignEnd="@+id/map" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SearchImgBtnMap"
+        android:onClick="searchBtnMap"
+        android:src="@drawable/ic_search"
+        android:background="?android:selectableItemBackground"
+        android:layout_alignBottom="@+id/editTextSearch"
+        android:layout_alignRight="@+id/map"
+        android:layout_alignEnd="@+id/map" />
 </RelativeLayout>

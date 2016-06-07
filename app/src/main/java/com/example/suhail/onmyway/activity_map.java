@@ -3,9 +3,10 @@ package com.example.suhail.onmyway;
 import android.app.Dialog;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,65 +16,40 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 
-public class activity_map extends AppCompatActivity {
+public class activity_map extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     GoogleMap mMap; //member variable
-    private static final int ERROR_DIALOG_REQUEST = 9001; //constant to request certain king of dialog box definition from google play services lib
-    private static final double
-            AJAX_LAT = 43.851063,
-            AJAX_LNG = -79.019737;
+    private GoogleApiClient mLocationClient;
+//    private LocationListener mListener; //will be used for later
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_activity_map);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_activity_map);
 
-        if (servicesOK()) {
-            setContentView(R.layout.activity_activity_map);
-
-            if(initMap()) {
-                Toast.makeText(this, "Ready to map!", Toast.LENGTH_SHORT).show();
-                gotoLocation(AJAX_LAT, AJAX_LNG, 13);
-
-                //as of now user must grand permissions to app from phone settings
-                try {
-                    mMap.setMyLocationEnabled(true);
-                } catch (SecurityException e) {
-                    Toast.makeText(this, "My Location not enabled!", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(this, "Map not connected!", Toast.LENGTH_SHORT).show();
-            }
+        if(initMap()) {
+            mLocationClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+            mLocationClient.connect();
         } else {
-            Toast.makeText(this, "Services not OK!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Map not connected!", Toast.LENGTH_SHORT).show();
         }
-
-    }
-
-    //check to see if the google services are ok
-    public boolean servicesOK() {
-
-        int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        // handle 3 different possibility
-        if (isAvailable == ConnectionResult.SUCCESS) { //everything ok, user can make mapping request
-            return true;
-        } else if (GooglePlayServicesUtil.isUserRecoverableError(isAvailable)) { //error user can do something about
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(isAvailable, this, ERROR_DIALOG_REQUEST);
-            dialog.show(); //google play services lib delivers correct dialog box telling user what to do
-        } else { //something wrong, user cant do anything about
-            Toast.makeText(this, "Can't connect to mapping service", Toast.LENGTH_SHORT).show();
-        }
-        return false;
     }
 
     //get a reference to the map object
@@ -97,10 +73,7 @@ public class activity_map extends AppCompatActivity {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
-
     public void geoLocate(String searchString) throws IOException {
-
-
         Geocoder gc = new Geocoder(this);
         List<Address> list = gc.getFromLocationName(searchString, 3);
 
@@ -112,6 +85,10 @@ public class activity_map extends AppCompatActivity {
             double lat = add.getLatitude();
             double lng = add.getLongitude();
             gotoLocation(lat, lng, 17);
+
+            MarkerOptions options = new MarkerOptions().title(locality).position(new LatLng(lat, lng));
+            mMap.addMarker(options);
+
         } else {
             Toast.makeText(this, "No results found for: "+ searchString, Toast.LENGTH_LONG).show();
         }
@@ -125,4 +102,81 @@ public class activity_map extends AppCompatActivity {
 
         geoLocate(searchString);
     }
+
+    //set initial state to current location
+    public void setCurrentLocation(){
+        try {
+            Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
+            if(currentLocation == null) {
+                Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
+            } else {
+                LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                mMap.animateCamera(update);
+
+                MarkerOptions options = new MarkerOptions().title(currentLocation.getLatitude() +
+                        ", " + currentLocation.getLongitude()).position(latLng);
+                mMap.addMarker(options);
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "My Location not enabled!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void showCurrentLocation(View view) {
+
+        setCurrentLocation();
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Toast.makeText(this, "Ready to map!", Toast.LENGTH_SHORT).show();
+        setCurrentLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        LocationServices.FusedLocationApi.removeLocationUpdates(mLocationClient, mListener);
+    }
+//    //use this function to do recurringLocationChecks
+//    public void recurringLocationCheck() {
+//        mListener = new LocationListener() {
+//
+//            //called automatically each time you send out a request and a new location comes back
+//            @Override
+//            public void onLocationChanged(Location location) {
+//
+//                //execute when location changes
+//                Toast.makeText(activity_map.this, "Location changed: " + location.getLatitude() +
+//                        ", " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+//                gotoLocation(location.getLatitude(), location.getLongitude(), 15);
+//
+//            }
+//        };
+//
+//        LocationRequest request = LocationRequest.create();
+//        request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+//        request.setInterval(10000);
+//        request.setFastestInterval(5000);
+//
+//        try{
+//            LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, request, mListener);
+//        } catch (SecurityException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
+

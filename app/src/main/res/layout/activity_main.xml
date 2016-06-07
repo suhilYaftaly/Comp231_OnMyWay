@@ -12,7 +12,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Hello World!"
+        android:id="@+id/textView" />
 
     <Button
         android:layout_width="wrap_content"
@@ -20,7 +21,19 @@
         android:text="SEARCH"
         android:id="@+id/searchButtonMain"
         android:onClick="searchBtnMain"
-        android:layout_marginTop="176dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchImgBtnMain"
+        android:onClick="searchIconMain"
+        android:src="@drawable/ic_search"
+        android:background="?android:selectableItemBackground"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/searchButtonMain"
+        android:layout_toStartOf="@+id/searchButtonMain" />
+
 </RelativeLayout>
