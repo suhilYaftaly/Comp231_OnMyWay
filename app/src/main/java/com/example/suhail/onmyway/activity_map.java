@@ -25,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
 
     GoogleMap mMap; //member variable
     private GoogleApiClient mLocationClient;
+    private Marker marker , myLocationMarker;
 //    private LocationListener mListener; //will be used for later
 
     @Override
@@ -86,8 +88,11 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
             double lng = add.getLongitude();
             gotoLocation(lat, lng, 17);
 
+            if(marker != null){
+                marker.remove();
+            }
             MarkerOptions options = new MarkerOptions().title(locality).position(new LatLng(lat, lng));
-            mMap.addMarker(options);
+            marker = mMap.addMarker(options);
 
         } else {
             Toast.makeText(this, "No results found for: "+ searchString, Toast.LENGTH_LONG).show();
@@ -114,9 +119,12 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
                 mMap.animateCamera(update);
 
+                if(myLocationMarker != null){
+                    myLocationMarker.remove();
+                }
                 MarkerOptions options = new MarkerOptions().title(currentLocation.getLatitude() +
                         ", " + currentLocation.getLongitude()).position(latLng);
-                mMap.addMarker(options);
+                myLocationMarker = mMap.addMarker(options);
             }
         } catch (SecurityException e) {
             e.printStackTrace();
