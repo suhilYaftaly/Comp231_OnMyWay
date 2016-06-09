@@ -1,5 +1,6 @@
 package com.example.suhail.onmyway;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -40,11 +41,22 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_activity_map);
 
         if(initMap()) {
-            mLocationClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-            mLocationClient.connect();
+            Intent intent = getIntent();
+            String addressMessage = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+
+            if (addressMessage == null) {
+                mLocationClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .build();
+                mLocationClient.connect();
+            } else {
+                try {
+                    geoLocate(addressMessage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         } else {
             Toast.makeText(this, "Map not connected!", Toast.LENGTH_SHORT).show();
         }

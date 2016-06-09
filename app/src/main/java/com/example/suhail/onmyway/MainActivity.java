@@ -14,6 +14,9 @@ public class MainActivity extends AppCompatActivity {
 
     private String[] addresses = {"Ajax ON", "New York", "Toronto ON", "Canada's Wonderland", "CN Tower", "Toronto Zoo", "Rogers Center", "Ontario Science Center", "Toronto Islands", "Toronto Eaton Center"};
     String address;
+    public final static String EXTRA_MESSAGE = "Address";
+    private Toast toastObject;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,26 +35,34 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         address = String.valueOf(parent.getItemAtPosition(position));
+                        Toast.makeText(MainActivity.this, address + ": Selected!", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
     }
 
     public void searchIconMain(View view) {
-//        Toast.makeText(this, "search not implemented yet!", Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "Address: " + address, Toast.LENGTH_SHORT).show();
+
+        if(address != null) {
+            Intent intent = new Intent(this, activity_map.class);
+            intent.putExtra("Address", address);
+            startActivity(intent);
+            finish();
+        }else{
+            Toast.makeText(this, "Please select an item first:", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void addItemMain(View view) {
-        Toast.makeText(this, "add not implemented yet!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Add not implemented yet!", Toast.LENGTH_SHORT).show();
     }
 
     public void editItemMain(View view) {
-        Toast.makeText(this, "edit not implemented yet!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Edit not implemented yet!", Toast.LENGTH_SHORT).show();
     }
 
     public void deleteItemMain(View view) {
-        Toast.makeText(this, "delete not implemented yet!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Delete not implemented yet!", Toast.LENGTH_SHORT).show();
     }
 
     public void myLocationMain(View view) {
