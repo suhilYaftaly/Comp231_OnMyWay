@@ -9,22 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.suhail.onmyway.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:id="@+id/textView" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SEARCH"
-        android:id="@+id/searchButtonMain"
-        android:onClick="searchBtnMain"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,7 +17,54 @@
         android:src="@drawable/ic_search"
         android:background="?android:selectableItemBackground"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/searchButtonMain"
-        android:layout_toStartOf="@+id/searchButtonMain" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addImgBtn"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="?android:selectableItemBackground"
+        android:onClick="addItemMain"
+        android:src="@drawable/ic_add" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtImgBtn"
+        android:background="?android:selectableItemBackground"
+        android:onClick="editItemMain"
+        android:src="@drawable/ic_edit"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/addImgBtn"
+        android:layout_toEndOf="@+id/addImgBtn" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deleteImgBtn"
+        android:background="?android:selectableItemBackground"
+        android:onClick="deleteItemMain"
+        android:src="@drawable/ic_delete"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/myLocationImgBtnMain"
+        android:background="?android:selectableItemBackground"
+        android:onClick="myLocationMain"
+        android:src="@drawable/ic_my_location"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/deleteImgBtn"
+        android:layout_toEndOf="@+id/deleteImgBtn"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp" />
 
 </RelativeLayout>
