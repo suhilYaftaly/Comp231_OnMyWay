@@ -44,11 +44,12 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
             Intent intent = getIntent();
             String addressMessage = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
+            mLocationClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+
             if (addressMessage == null) {
-                mLocationClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .build();
                 mLocationClient.connect();
             } else {
                 try {
@@ -121,7 +122,7 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
         try {
             Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
             if(currentLocation == null) {
-                Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
+                mLocationClient.connect();
             } else {
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
@@ -142,7 +143,6 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
     }
 
     public void showCurrentLocation(View view) {
-
         setCurrentLocation();
     }
 
