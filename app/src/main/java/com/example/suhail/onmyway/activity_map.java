@@ -63,6 +63,13 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     //get a reference to the map object
     public boolean initMap() {
         if (mMap == null) {
@@ -142,14 +149,13 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+
     public void showCurrentLocation(View view) {
         setCurrentLocation();
     }
 
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Toast.makeText(this, "Ready to map!", Toast.LENGTH_SHORT).show();
         setCurrentLocation();
     }
 
@@ -167,6 +173,22 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
     protected void onPause() {
         super.onPause();
 //        LocationServices.FusedLocationApi.removeLocationUpdates(mLocationClient, mListener);
+    }
+
+    public void normalMapView(View view) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    }
+
+    public void satelliteMapView(View view) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+    }
+
+    public void terrainMapView(View view) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+    }
+
+    public void hybridMapView(View view) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 //    //use this function to do recurringLocationChecks
 //    public void recurringLocationCheck() {

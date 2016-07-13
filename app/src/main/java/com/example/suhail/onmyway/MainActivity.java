@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String[] addresses = {"Ajax ON", "New York", "Toronto ON", "Canada's Wonderland", "CN Tower", "Toronto Zoo", "Rogers Center", "Ontario Science Center", "Toronto Islands", "Toronto Eaton Center"};
+    private String[] addresses = {"Ajax ON", "New York", "Toronto ON", "Canada's Wonderland", "CN Tower", "Toronto Zoo", "Rogers Center", "Ontario Science Center", "Toronto Islands", "Toronto Eaton Center", "Tim Hortons"};
     String address;
     public final static String EXTRA_MESSAGE = "Address";
     private Toast toastObject;
