@@ -33,7 +33,8 @@
         <activity
             android:name=".activity_map"
             android:label="@string/title_activity_activity_map"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Edit_Item_Activity"></activity>
     </application>
 
 </manifest>

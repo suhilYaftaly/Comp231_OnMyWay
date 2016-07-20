@@ -1,16 +1,29 @@
 package com.example.suhail.onmyway;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements OnItemClickListener{
+    String dbString;
+    ListView lstview;
+    MYDBHandler dbHandler;
+    String selectedItem;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> listItems;
+
 
     private String[] addresses = {"Ajax ON", "New York", "Toronto ON", "Canada's Wonderland", "CN Tower", "Toronto Zoo", "Rogers Center", "Ontario Science Center", "Toronto Islands", "Toronto Eaton Center", "Tim Hortons"};
     String address;
@@ -22,16 +35,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        returnSelectedAddress();
+        dbHandler = new MYDBHandler(this, null, null, 1);
+
+
+        listItems = new ArrayList<String>();
+        listItems = dbHandler.databaseToString();
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, listItems);
+        lstview = (ListView) findViewById(R.id.listView);
+        lstview.setAdapter(adapter);
+
+        lstview.setOnItemClickListener(this);
+
+        //returnSelectedAddress();
     }
 
-    private void returnSelectedAddress(){
+   /* private void returnSelectedAddress(){
         ListAdapter myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, addresses);
         ListView addressListView = (ListView) findViewById(R.id.addressListView);
         addressListView.setAdapter(myAdapter);
 
         addressListView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener(){
+                new OnItemClickListener(){
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         address = String.valueOf(parent.getItemAtPosition(position));
@@ -39,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-    }
+    }*/
 
     public void searchIconMain(View view) {
 
@@ -53,16 +78,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void addItemMain(View view) {
-        Toast.makeText(this, "Add not implemented yet!", Toast.LENGTH_SHORT).show();
-    }
+
 
     public void editItemMain(View view) {
-        Toast.makeText(this, "Edit not implemented yet!", Toast.LENGTH_SHORT).show();
+
+        if (selectedItem!= null){
+            Intent intent=new Intent(this,Edit_Item_Activity.class);
+           intent.putExtra("Key",selectedItem);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(this, "First select an item !", Toast.LENGTH_SHORT).show();}
+        displayList();
+
     }
 
     public void deleteItemMain(View view) {
-        Toast.makeText(this, "Delete not implemented yet!", Toast.LENGTH_SHORT).show();
+        if (selectedItem!= null){
+        dbHandler.deleteitem(selectedItem);
+            Toast.makeText(this, "" + selectedItem +" Deleted", Toast.LENGTH_SHORT).show();
+        }
+        else {
+        Toast.makeText(this, "First select an item !", Toast.LENGTH_SHORT).show();}
+        displayList();
+
+
     }
 
     public void myLocationMain(View view) {
@@ -70,6 +110,47 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    public void addButtonClicked(View view) {
+        startActivity(new Intent(this,Edit_Item_Activity.class));
+
+        displayList();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TextView temp = (TextView)view;
+        selectedItem=String.valueOf(temp.getText());
+        Toast.makeText(this,temp.getText()+" Selected",Toast.LENGTH_SHORT).show();
+        temp.setBackgroundColor(Color.CYAN);
+        for (int i = 0; i < lstview.getChildCount(); i++) {
+            if (position == i) {
+                lstview.getChildAt(i).setBackgroundColor(Color.BLUE);
+            } else {
+                lstview.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+            }
+        }
+    }
+
+    public void displayList(){
+       adapter.clear();
+        //adapter.add(android.R.layout.simple_list_item_1,dbHandler.databaseToString()));
+        listItems = dbHandler.databaseToString();
+
+        if (listItems!= null){
+
+            for (String object : listItems) {
+
+                adapter.insert(object, adapter.getCount());
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+        lstview.refreshDrawableState();
+
+
+    }
+
+
 }
 
 
