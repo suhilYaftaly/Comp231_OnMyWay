@@ -132,8 +132,17 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
 
         if(list.size() > 0) {
             android.location.Address add = list.get(0);
-            String locality = add.getLocality();
-            Toast.makeText(this, "Found: "+ locality, Toast.LENGTH_SHORT).show();
+            String locality = null;
+            if(storeName != null)
+            {
+                String address = add.getAddressLine(0);
+                Toast.makeText(this, "Found: " + address, Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                locality =  add.getLocality();
+                Toast.makeText(this, "Found: " + locality, Toast.LENGTH_SHORT).show();
+            }
 
             double lat = add.getLatitude();
             double lng = add.getLongitude();
