@@ -38,6 +38,7 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
     private Marker addressMarker, myLocationMarker;
 //    private LocationListener mListener; //will be used for later
     private EditText searchEditText;
+    String storeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +48,24 @@ public class activity_map extends AppCompatActivity implements GoogleApiClient.C
         if(initMap()) {
             Intent intent = getIntent();
             String addressMessage = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+            storeName = intent.getStringExtra("storeSearch");
 
             mLocationClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build();
-
-            if (addressMessage == null) {
+                    
+           // To display store name in search bar
+            if (storeName!= null) {
+                try {
+                    TextView tv = (TextView) findViewById(R.id.editTextSearch);
+                    tv.setText(this.storeName);
+                    geoLocate(this.storeName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else  if (addressMessage == null) {
                 mLocationClient.connect();
             } else {
                 try {

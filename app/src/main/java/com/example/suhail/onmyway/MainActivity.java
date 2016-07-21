@@ -68,20 +68,31 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
     public void searchIconMain(View view) {
 
-        if(address != null) {
+        /*if(address != null) {
             Intent intent = new Intent(this, activity_map.class);
             intent.putExtra("Address", address);
             startActivity(intent);
             finish();
         }else{
             Toast.makeText(this, "Please select an item first:", Toast.LENGTH_SHORT).show();
-        }
+        }*/
+        //Need to set search location app first
+        // To be done in phase 2
+        String currentLocation =  "Toronto, ON";
+        Intent intent = new Intent(this, activity_map.class);
+        intent.putExtra("Address", currentLocation);
+
+        dbHandler = new MYDBHandler(this, null, null, 1);
+        String[] getItem = dbHandler.viewItem(selectedItem);
+
+        //insert store name or address to call
+        intent.putExtra("storeSearch", getItem[3]);
+        startActivity(intent);
+        Toast.makeText(this, "Searching " + getItem[3] + "in " + currentLocation + "....." , Toast.LENGTH_SHORT).show();
+        finish();
     }
 
-
-
     public void editItemMain(View view) {
-
         if (selectedItem!= null){
             Intent intent=new Intent(this,Edit_Item_Activity.class);
            intent.putExtra("Key",selectedItem);
