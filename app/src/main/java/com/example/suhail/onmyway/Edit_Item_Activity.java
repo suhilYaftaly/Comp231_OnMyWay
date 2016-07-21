@@ -78,7 +78,7 @@ public class Edit_Item_Activity extends AppCompatActivity {
 
         if (itemEnabled.isChecked()){ en=1;}
         if (errorcheck==false) {
-            Items item = new Items(itm, desc, str, rng, en);
+            Items item = new Items(itm, str, desc, rng, en);
 
             if (value != null) {
                 item.set_id(Integer.valueOf(str1[0]));
