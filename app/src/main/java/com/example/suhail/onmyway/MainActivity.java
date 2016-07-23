@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     String selectedItem;
     ArrayAdapter<String> adapter;
     ArrayList<String> listItems;
+    long  mLastClickTime;
 
 
     private String[] addresses = {"Ajax ON", "New York", "Toronto ON", "Canada's Wonderland", "CN Tower", "Toronto Zoo", "Rogers Center", "Ontario Science Center", "Toronto Islands", "Toronto Eaton Center", "Tim Hortons"};
@@ -140,7 +141,23 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 lstview.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
             }
         }
+
+        //Double click watcher
+        long currTime = System.currentTimeMillis();
+        //if (currTime - mLastClickTime < ViewConfiguration.getDoubleTapTimeout()) {
+        if (currTime - mLastClickTime < 2000) {
+            onItemDoubleClick(parent, view, position, 1);
+        }
+        mLastClickTime = currTime;
     }
+
+    public void onItemDoubleClick(AdapterView<?> adapterView, View view, int position, long l) {
+        //Toast.makeText(this, "Double click !", Toast.LENGTH_SHORT).show();
+        Intent intent=new Intent(this,View_Item_Activity.class);
+        intent.putExtra("Key",selectedItem);
+        startActivity(intent);
+    }
+
 
     public void displayList(){
        adapter.clear();
