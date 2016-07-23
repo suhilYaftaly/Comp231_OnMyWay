@@ -130,4 +130,13 @@
         android:textColor="#260895"
         android:textSize="20dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EDIT"
+        android:id="@+id/buttonEdit"
+        android:layout_below="@+id/txtRange"
+        android:layout_centerHorizontal="true"
+        android:onClick="editButtonClicked" />
+
 </RelativeLayout>

@@ -35,6 +35,31 @@ public class View_Item_Activity extends AppCompatActivity {
         itemEnabled=(CheckBox)findViewById(R.id.chkEnabled);
         dbHandler=new MYDBHandler(this,null,null,1);
 
+        //set items from DB
+        setFromDatabase();
+
+        // Disableing editble property
+        itemTitle.setEnabled(false);
+        itemDesc.setEnabled(false);
+        itemStore.setEnabled(false);
+        itemRange.setEnabled(false);
+        itemEnabled.setEnabled(false);
+        itemTitle.setClickable(false);
+        itemDesc.setClickable(false);
+        itemStore.setClickable(false);
+        itemRange.setClickable(false);
+        itemEnabled.setClickable(false);
+    }
+    // To refresh screen after edit
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        setFromDatabase();
+    }
+
+    private void setFromDatabase()
+    {
         if (value != null) {
             //load data to edit
 
@@ -48,21 +73,17 @@ public class View_Item_Activity extends AppCompatActivity {
             {itemEnabled.setChecked(true);}
             else {itemEnabled.setChecked(false);}
         }
-        // Disableing editble property
-        itemTitle.setEnabled(false);
-        itemDesc.setEnabled(false);
-        itemStore.setEnabled(false);
-        itemRange.setEnabled(false);
-        itemEnabled.setEnabled(false);
-        itemTitle.setClickable(false);
-        itemDesc.setClickable(false);
-        itemStore.setClickable(false);
-        itemRange.setClickable(false);
-        itemEnabled.setClickable(false);
     }
 
     public void okButtonClicked(View view){
         finish();
     }
+
+    public void editButtonClicked(View view){
+        Intent intent=new Intent(this,Edit_Item_Activity.class);
+        intent.putExtra("Key",value);
+        startActivity(intent);
+    }
+
 }
 
