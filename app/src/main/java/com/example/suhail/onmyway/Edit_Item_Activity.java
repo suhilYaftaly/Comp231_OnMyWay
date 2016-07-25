@@ -1,5 +1,7 @@
 package com.example.suhail.onmyway;
-
+/**
+ * Created by Aisha Naseem on 2016-07-19.
+ */
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -87,9 +89,10 @@ public class Edit_Item_Activity extends AppCompatActivity {
             } else {
                 dbHandler.addItem(item);
                 Toast.makeText(this," Item saved Successfully ",Toast.LENGTH_SHORT).show();
+
             }
 
-
+            setResult(RESULT_OK, null);
             finish();
         }
         else

@@ -1,7 +1,7 @@
 package com.example.suhail.onmyway;
 
 /**
- * Created by aisha on 2016-07-19.
+ * Created by Aisha Naseem on 2016-07-19.
  */
 public class Items {private int _id;
     private String _itemname;

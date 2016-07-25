@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -16,14 +17,14 @@ import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements OnItemClickListener {
     String dbString;
     ListView lstview;
     MYDBHandler dbHandler;
     String selectedItem;
     ArrayAdapter<String> adapter;
     ArrayList<String> listItems;
-    long  mLastClickTime;
+    long mLastClickTime;
 
 
     private String[] addresses = {"Ajax ON", "New York", "Toronto ON", "Canada's Wonderland", "CN Tower", "Toronto Zoo", "Rogers Center", "Ontario Science Center", "Toronto Islands", "Toronto Eaton Center", "Tim Hortons"};
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         lstview.setAdapter(adapter);
 
         lstview.setOnItemClickListener(this);
+
 
         //returnSelectedAddress();
     }
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         }*/
         //Need to set search location app first
         // To be done in phase 2
-        String currentLocation =  "Toronto, ON";
+        String currentLocation = "Toronto, ON";
         Intent intent = new Intent(this, activity_map.class);
         intent.putExtra("Address", currentLocation);
 
@@ -89,29 +91,29 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         //insert store name or address to call
         intent.putExtra("storeSearch", getItem[3]);
         startActivity(intent);
-        Toast.makeText(this, "Searching " + getItem[3] + "in " + currentLocation + "....." , Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Searching " + getItem[3] + "in " + currentLocation + ".....", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     public void editItemMain(View view) {
-        if (selectedItem!= null){
-            Intent intent=new Intent(this,Edit_Item_Activity.class);
-           intent.putExtra("Key",selectedItem);
+        if (selectedItem != null) {
+            Intent intent = new Intent(this, Edit_Item_Activity.class);
+            intent.putExtra("Key", selectedItem);
             startActivity(intent);
+        } else {
+            Toast.makeText(this, "First select an item !", Toast.LENGTH_SHORT).show();
         }
-        else {
-            Toast.makeText(this, "First select an item !", Toast.LENGTH_SHORT).show();}
         displayList();
 
     }
 
     public void deleteItemMain(View view) {
-        if (selectedItem!= null){
-        dbHandler.deleteitem(selectedItem);
-            Toast.makeText(this, "" + selectedItem +" Deleted", Toast.LENGTH_SHORT).show();
+        if (selectedItem != null) {
+            dbHandler.deleteitem(selectedItem);
+            Toast.makeText(this, "" + selectedItem + " Deleted", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "First select an item !", Toast.LENGTH_SHORT).show();
         }
-        else {
-        Toast.makeText(this, "First select an item !", Toast.LENGTH_SHORT).show();}
         displayList();
 
 
@@ -122,11 +124,23 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         startActivity(intent);
         finish();
     }
-    public void addButtonClicked(View view) {
-        startActivity(new Intent(this,Edit_Item_Activity.class));
 
-        displayList();
+    public void addButtonClicked(View view) {
+        Intent intent = new Intent(this, Edit_Item_Activity.class);
+        startActivityForResult(intent, 1);
+
     }
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            Intent refresh = new Intent(this, MainActivity.class);
+            startActivity(refresh);
+            this.finish();
+        }
+    }
+
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -159,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     }
 
 
-    public void displayList(){
+    public  void displayList(){
        adapter.clear();
         //adapter.add(android.R.layout.simple_list_item_1,dbHandler.databaseToString()));
         listItems = dbHandler.databaseToString();
