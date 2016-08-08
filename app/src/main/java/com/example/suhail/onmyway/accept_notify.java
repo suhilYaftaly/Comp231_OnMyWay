@@ -61,4 +61,3 @@ public class accept_notify extends BroadcastReceiver {
     }
 
 }
-
