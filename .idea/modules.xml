@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Comp231_OnMyWay.iml" filepath="$PROJECT_DIR$/Comp231_OnMyWay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Comp231_OnMyWay.iml" filepath="$PROJECT_DIR$/.idea/Comp231_OnMyWay.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

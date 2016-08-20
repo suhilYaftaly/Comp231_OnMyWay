@@ -1,9 +1,13 @@
 package com.example.suhail.onmyway;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView;
 
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
@@ -25,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     ArrayAdapter<String> adapter;
     ArrayList<String> listItems;
     long mLastClickTime;
-
+    private static final int MY_NOTIFICATION_ID=1;
 
     private String[] addresses = {"Ajax ON", "New York", "Toronto ON", "Canada's Wonderland", "CN Tower", "Toronto Zoo", "Rogers Center", "Ontario Science Center", "Toronto Islands", "Toronto Eaton Center", "Tim Hortons"};
     String address;
@@ -39,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         setContentView(R.layout.activity_main);
         dbHandler = new MYDBHandler(this, null, null, 1);
 
-
+        my_Notification("Hello! There", "Do OnMyWay let know what are you upto");
         listItems = new ArrayList<String>();
         listItems = dbHandler.databaseToString();
         adapter = new ArrayAdapter<String>(this,
@@ -191,7 +196,17 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
 
     }
-
+    private void my_Notification(String notificationTitle,
+                                 String notificationMessage) {
+        NotificationManager mNM = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        Notification notification = builder
+                .setSmallIcon(R.drawable.reminder_launcher_icon)
+                .setTicker(notificationTitle)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationMessage).build();
+        mNM.notify(MY_NOTIFICATION_ID, notification);
+    }
 
 }
 

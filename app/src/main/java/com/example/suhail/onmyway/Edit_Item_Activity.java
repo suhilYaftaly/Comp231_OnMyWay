@@ -2,9 +2,14 @@ package com.example.suhail.onmyway;
 /**
  * Created by Aisha Naseem on 2016-07-19.
  */
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -21,6 +26,7 @@ public class Edit_Item_Activity extends AppCompatActivity {
     TextView er;
     String value;
     String []  str1=new String[10];
+    private static final int MY_NOTIFICATION_ID=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,10 +92,11 @@ public class Edit_Item_Activity extends AppCompatActivity {
                 item.set_id(Integer.valueOf(str1[0]));
                 dbHandler.updateItem(item);
                 Toast.makeText(this," Item updated Successfully ",Toast.LENGTH_SHORT).show();
+                my_Notification(str, itm);
             } else {
                 dbHandler.addItem(item);
-                Toast.makeText(this," Item saved Successfully ",Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(this," Item saved Successfully ", Toast.LENGTH_SHORT).show();
+                my_Notification(str,itm);
             }
 
             setResult(RESULT_OK, null);
@@ -100,7 +107,17 @@ public class Edit_Item_Activity extends AppCompatActivity {
     }
 
 
-
+    private void my_Notification(String notificationTitle,
+                                 String notificationMessage) {
+        NotificationManager mNM = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        Notification notification = builder
+                .setSmallIcon(R.drawable.reminder_launcher_icon)
+                .setTicker(notificationTitle)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationMessage).build();
+        mNM.notify(MY_NOTIFICATION_ID, notification);
+    }
     public void CancelButtonClicked(View view){
         finish();
     }
